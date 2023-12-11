@@ -1,7 +1,11 @@
-export interface RootState {
+export interface Items {
   data: object;
   loading: boolean;
   errors: string | null;
+}
+export interface RootState {
+  items: Items;
+  activeItemId: number | null;
 }
 
 export interface FetchAllRequestAction {
@@ -18,7 +22,13 @@ export interface FetchAllFailureAction {
   payload: string;
 }
 
+export interface SetActiveAction {
+  type: "SET_ACTIVE";
+  payload: number;
+}
+
 export type ActionTypes =
   | FetchAllRequestAction
   | FetchAllSuccessAction
-  | FetchAllFailureAction;
+  | FetchAllFailureAction
+  | SetActiveAction;

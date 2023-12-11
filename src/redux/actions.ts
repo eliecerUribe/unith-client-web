@@ -13,3 +13,8 @@ export const fetchAllFailure = (errors: string): ActionTypes => ({
   type: "FETCH_ALL_FAILURE",
   payload: errors,
 });
+
+export const setActive = (itemId: number): ActionTypes => ({
+  type: "SET_ACTIVE",
+  payload: itemId,
+});

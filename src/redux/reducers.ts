@@ -2,9 +2,8 @@ import { Reducer } from "redux";
 import { ActionTypes, RootState } from "./types";
 
 const initialState: RootState = {
-  data: {},
-  loading: false,
-  errors: null,
+  items: { data: {}, loading: false, errors: null },
+  activeItemId: null,
 };
 
 const rootReducer: Reducer<RootState, ActionTypes> = (
@@ -15,20 +14,34 @@ const rootReducer: Reducer<RootState, ActionTypes> = (
     case "FETCH_ALL":
       return {
         ...state,
-        loading: true,
-        errors: null,
+        items: {
+          ...state.items,
+          loading: true,
+          errors: null,
+        },
       };
     case "FETCH_ALL_SUCCESS":
       return {
         ...state,
-        loading: false,
-        data: action.payload,
+        items: {
+          ...state.items,
+          loading: false,
+          data: action.payload,
+        },
       };
     case "FETCH_ALL_FAILURE":
       return {
         ...state,
-        loading: false,
-        errors: action.payload,
+        items: {
+          ...state.items,
+          loading: false,
+          errors: action.payload,
+        },
+      };
+    case "SET_ACTIVE":
+      return {
+        ...state,
+        activeItemId: action.payload,
       };
     default:
       return state;

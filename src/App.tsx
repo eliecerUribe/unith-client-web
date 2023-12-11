@@ -1,24 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { connect, ConnectedProps } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import routes from "./router/routes";
 import { RootState } from "./redux/types";
-import { fetchAll } from "./redux/actions";
-import defaultImage from "./assets/default_image.png";
-import "./App.css";
+import { fetchAll, setActive } from "./redux/actions";
+import Image from "./components/Image";
+import "./App.scss";
 
 function App({
   data,
   loading,
   errors,
+  activeItemId,
   fetchAll,
+  setActive,
 }: ConnectedProps<typeof connect>) {
-  const [errorIndices, setErrorIndices] = useState<number[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [errorIndixes, setErrorIndixes] = useState<number[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAll();
   }, [fetchAll]);
 
+  const slicedData = useMemo(() => {
+    const pageSize = 10;
+
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    return data?.slice(startIndex, endIndex);
+  }, [data, page]);
+
   const handleImageError = (index: number) => {
-    setErrorIndices((prev) => [...prev, index]);
+    setErrorIndixes((prev) => [...prev, index]);
+  };
+
+  const onClickButton = (id: number) => {
+    setActive(id);
+    navigate(`${routes.DETAILS}/${id}`);
   };
 
   if (loading) {
@@ -29,48 +49,60 @@ function App({
     return <div>Error {errors}</div>;
   }
 
-  if (Object.values(data).length === 0) {
+  if (data?.length === 0) {
     return <div>No data</div>;
   }
-
   return (
     <>
       <div className="container-img">
-        {Object.values(data).map((item, index) =>
-          errorIndices.includes(index) ? (
-            <img
-              key={"Default" + index}
-              alt={"Default" + index}
-              src={defaultImage}
-              width={200}
-              height={200}
+        {slicedData?.map((item) =>
+          errorIndixes.includes(item.index) ? (
+            <Image
+              key={"Default" + item.index}
+              title={"Default" + item.index}
+              isDefault
             />
           ) : (
-            <img
+            <Image
               key={item.title}
-              alt={item.title}
+              title={item.title}
               src={item.image}
-              width={200}
-              height={200}
-              onError={() => handleImageError(index)}
+              isActive={activeItemId === item.index}
+              onClick={() => onClickButton(item.index)}
+              onError={() => handleImageError(item.index)}
             />
           )
         )}
       </div>
+      <ul className="slick-dots">
+        <li className={page === 1 ? "slick-active" : ""}>
+          <button onClick={() => setPage(1)}>1</button>
+        </li>
+        <li className={page === 2 ? "slick-active" : ""}>
+          <button onClick={() => setPage(2)}>2</button>
+        </li>
+        <li className={page === 3 ? "slick-active" : ""}>
+          <button onClick={() => setPage(3)}>3</button>
+        </li>
+      </ul>
     </>
   );
 }
 
 const stateToProps = (state: RootState) => {
-  const { data, loading, errors } = state;
+  const { data, loading, errors } = state.items;
   return {
-    data,
+    data: Object.values(data)?.sort((a, b) => a.index - b.index) || [],
     loading,
     errors,
+    activeItemId: state.activeItemId,
   };
 };
 
-const dispatchToProps = { fetchAll };
+const dispatchToProps = {
+  fetchAll,
+  setActive,
+};
 
 const ConnectedComponent = connect(stateToProps, dispatchToProps)(App);
 
