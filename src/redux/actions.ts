@@ -14,7 +14,7 @@ export const fetchAllFailure = (errors: string): ActionTypes => ({
   payload: errors,
 });
 
-export const setActive = (itemId: number): ActionTypes => ({
+export const setActive = (item: object): ActionTypes => ({
   type: "SET_ACTIVE",
-  payload: itemId,
+  payload: item,
 });

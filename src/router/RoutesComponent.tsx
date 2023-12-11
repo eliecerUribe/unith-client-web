@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import App from "../App";
-import Details from "../Details";
+import Details from "../views/Details";
 import routes from "./routes";
 
 export default function RoutesComponent() {

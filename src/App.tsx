@@ -5,13 +5,14 @@ import routes from "./router/routes";
 import { RootState } from "./redux/types";
 import { fetchAll, setActive } from "./redux/actions";
 import Image from "./components/Image";
+import PaginationDots from "./components/PaginationDots";
 import "./App.scss";
 
 function App({
   data,
   loading,
   errors,
-  activeItemId,
+  activeItem,
   fetchAll,
   setActive,
 }: ConnectedProps<typeof connect>) {
@@ -37,7 +38,9 @@ function App({
   };
 
   const onClickButton = (id: number) => {
-    setActive(id);
+    const activeItem = slicedData.find((elem) => elem.index === id);
+
+    setActive(activeItem);
     navigate(`${routes.DETAILS}/${id}`);
   };
 
@@ -67,24 +70,14 @@ function App({
               key={item.title}
               title={item.title}
               src={item.image}
-              isActive={activeItemId === item.index}
+              isActive={activeItem.index === item.index}
               onClick={() => onClickButton(item.index)}
               onError={() => handleImageError(item.index)}
             />
           )
         )}
       </div>
-      <ul className="slick-dots">
-        <li className={page === 1 ? "slick-active" : ""}>
-          <button onClick={() => setPage(1)}>1</button>
-        </li>
-        <li className={page === 2 ? "slick-active" : ""}>
-          <button onClick={() => setPage(2)}>2</button>
-        </li>
-        <li className={page === 3 ? "slick-active" : ""}>
-          <button onClick={() => setPage(3)}>3</button>
-        </li>
-      </ul>
+      <PaginationDots currentPage={page} onClick={setPage} />
     </>
   );
 }
@@ -95,7 +88,7 @@ const stateToProps = (state: RootState) => {
     data: Object.values(data)?.sort((a, b) => a.index - b.index) || [],
     loading,
     errors,
-    activeItemId: state.activeItemId,
+    activeItem: state.activeItem || {},
   };
 };
 

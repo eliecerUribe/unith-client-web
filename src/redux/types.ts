@@ -5,7 +5,7 @@ export interface Items {
 }
 export interface RootState {
   items: Items;
-  activeItemId: number | null;
+  activeItem: object | null;
 }
 
 export interface FetchAllRequestAction {
@@ -24,7 +24,7 @@ export interface FetchAllFailureAction {
 
 export interface SetActiveAction {
   type: "SET_ACTIVE";
-  payload: number;
+  payload: object;
 }
 
 export type ActionTypes =

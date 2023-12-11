@@ -3,7 +3,7 @@ import { ActionTypes, RootState } from "./types";
 
 const initialState: RootState = {
   items: { data: {}, loading: false, errors: null },
-  activeItemId: null,
+  activeItem: null,
 };
 
 const rootReducer: Reducer<RootState, ActionTypes> = (
@@ -41,7 +41,7 @@ const rootReducer: Reducer<RootState, ActionTypes> = (
     case "SET_ACTIVE":
       return {
         ...state,
-        activeItemId: action.payload,
+        activeItem: action.payload,
       };
     default:
       return state;
