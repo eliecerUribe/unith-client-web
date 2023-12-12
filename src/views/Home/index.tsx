@@ -1,14 +1,21 @@
 import { useEffect, useState, useMemo } from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import routes from "./router/routes";
-import { RootState } from "./redux/types";
-import { fetchAll, setActive } from "./redux/actions";
-import Image from "./components/Image";
-import PaginationDots from "./components/PaginationDots";
-import "./App.scss";
+import routes from "../../router/routes";
+import { RootState } from "../../redux/types";
+import { fetchAll, setActive } from "../../redux/actions";
+import Image from "../../components/Image";
+import PaginationDots from "../../components/PaginationDots";
+import "./styles.scss";
 
-function App({
+interface ItemType {
+  index: number;
+  title: string;
+  image: string;
+  description: string;
+}
+
+function Home({
   data,
   loading,
   errors,
@@ -58,7 +65,7 @@ function App({
   return (
     <>
       <div className="container-img">
-        {slicedData?.map((item) =>
+        {slicedData?.map((item: ItemType) =>
           errorIndixes.includes(item.index) ? (
             <Image
               key={"Default" + item.index}
@@ -97,6 +104,6 @@ const dispatchToProps = {
   setActive,
 };
 
-const ConnectedComponent = connect(stateToProps, dispatchToProps)(App);
+const ConnectedComponent = connect(stateToProps, dispatchToProps)(Home);
 
 export default ConnectedComponent;

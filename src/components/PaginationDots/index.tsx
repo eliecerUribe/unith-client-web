@@ -13,13 +13,13 @@ const PaginationDots: React.FC<PaginationDotsProps> = ({
   return (
     <ul className="slick-dots">
       <li className={currentPage === 1 ? "slick-active" : ""}>
-        <button onClick={() => onClick(1)}>1</button>
+        <button onClick={() => onClick(1)} />
       </li>
       <li className={currentPage === 2 ? "slick-active" : ""}>
-        <button onClick={() => onClick(2)}>2</button>
+        <button onClick={() => onClick(2)} />
       </li>
       <li className={currentPage === 3 ? "slick-active" : ""}>
-        <button onClick={() => onClick(3)}>3</button>
+        <button onClick={() => onClick(3)} />
       </li>
     </ul>
   );
