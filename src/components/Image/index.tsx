@@ -1,5 +1,6 @@
 import React from "react";
-import defaultImage from "../assets/default_image.png";
+import defaultImage from "../../assets/default_image.png";
+import "./styles.scss";
 
 interface ImageProps {
   title: string;
@@ -25,7 +26,7 @@ const Image: React.FC<ImageProps> = ({
   const style = isActive ? { border: "2px solid red" } : {};
 
   return (
-    <div style={style}>
+    <div className="image-container" style={style}>
       <img
         key={title}
         alt={title}
