@@ -1,17 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { RootState } from "../../redux/types";
-
+import { RootState, Item } from "../../redux/types";
 import "./styles.scss";
 
-interface DetailsProps {
-  title: string;
-  description: string;
-  image: string;
-}
-
-const Details: React.FC<DetailsProps> = ({ title, description, image }) => {
+const Details: React.FC<Item> = ({ title, description, image }) => {
   const navigate = useNavigate();
 
   const onClickButton = () => {
@@ -29,7 +22,7 @@ const Details: React.FC<DetailsProps> = ({ title, description, image }) => {
 };
 
 const stateToProps = (state: RootState) => {
-  const { title, description, image } = state.activeItem || {};
+  const { title, description, image } = state.activeItem ?? ({} as Item);
   return { title, description, image };
 };
 

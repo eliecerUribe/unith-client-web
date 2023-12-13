@@ -22,3 +22,12 @@
     border-color: #000;
   }
 }
+
+@media (max-width: 768px) {
+  .details {
+    img {
+      width: 300px;
+      height: 300px;
+    }
+  }
+}

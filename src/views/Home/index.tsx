@@ -2,18 +2,22 @@ import { useEffect, useState, useMemo } from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import routes from "../../router/routes";
-import { RootState } from "../../redux/types";
+import { RootState, Item } from "../../redux/types";
 import { fetchAll, setActive } from "../../redux/actions";
 import Image from "../../components/Image";
 import PaginationDots from "../../components/PaginationDots";
 import "./styles.scss";
 
-interface ItemType {
-  index: number;
-  title: string;
-  image: string;
-  description: string;
+interface HomeType {
+  data: Item[];
+  loading: boolean;
+  errors: string;
+  activeItem: object;
+  fetchAll: () => void;
+  setActive: (item: object) => void;
 }
+
+type HomeProps = HomeType & ConnectedProps<typeof connect>;
 
 function Home({
   data,
@@ -22,7 +26,7 @@ function Home({
   activeItem,
   fetchAll,
   setActive,
-}: ConnectedProps<typeof connect>) {
+}: HomeProps) {
   const [page, setPage] = useState<number>(1);
   const [errorIndixes, setErrorIndixes] = useState<number[]>([]);
   const navigate = useNavigate();
@@ -45,7 +49,7 @@ function Home({
   };
 
   const onClickButton = (id: number) => {
-    const activeItem = slicedData.find((elem) => elem.index === id);
+    const activeItem = slicedData.find((elem: Item) => elem.index === id);
 
     setActive(activeItem);
     navigate(`${routes.DETAILS}/${id}`);
@@ -54,18 +58,17 @@ function Home({
   if (loading) {
     return <div>Loading...</div>;
   }
-
   if (errors) {
     return <div>Error {errors}</div>;
   }
-
   if (data?.length === 0) {
     return <div>No data</div>;
   }
+
   return (
     <>
       <div className="container-img">
-        {slicedData?.map((item: ItemType) =>
+        {slicedData?.map((item: Item) =>
           errorIndixes.includes(item.index) ? (
             <Image
               key={"Default" + item.index}
@@ -94,7 +97,7 @@ const stateToProps = (state: RootState) => {
   return {
     data: Object.values(data)?.sort((a, b) => a.index - b.index) || [],
     loading,
-    errors,
+    errors: errors || "",
     activeItem: state.activeItem || {},
   };
 };

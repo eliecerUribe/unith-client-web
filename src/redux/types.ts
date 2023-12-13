@@ -3,9 +3,16 @@ export interface Items {
   loading: boolean;
   errors: string | null;
 }
+
+export interface Item {
+  index: number;
+  title: string;
+  image: string;
+  description: string;
+}
 export interface RootState {
   items: Items;
-  activeItem: object | null;
+  activeItem: Item | null;
 }
 
 export interface FetchAllRequestAction {
