@@ -7,13 +7,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install project dependencies
-RUN npm install
+RUN npm install --force
 
 # Copy the entire project to the working directory
 COPY . .
-
-# Build the project
-RUN npm run build
 
 # Expose the port that the app will run on
 EXPOSE 3000
